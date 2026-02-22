@@ -1,4 +1,4 @@
-const API_BASE = "/api/invoices";
+const API_BASE = "https://gst-invoice-backend-2wcc.onrender.com/api/invoices";
 
 /**
  * Parse error response — handles JSON and non-JSON responses
