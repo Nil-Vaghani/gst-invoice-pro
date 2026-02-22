@@ -303,7 +303,10 @@ export default function InvoiceForm({
           <div>
             <label className={labelCls}>Invoice Date</label>
             <input
-              className={inputCls + " cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer"}
+              className={
+                inputCls +
+                " cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+              }
               type="date"
               value={formData.invoiceDate}
               onChange={(e) => updateField("invoiceDate", e.target.value)}

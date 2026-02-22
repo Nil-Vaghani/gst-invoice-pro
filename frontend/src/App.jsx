@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import {
   ReceiptText,
   History,
@@ -6,10 +7,14 @@ import {
   CheckCircle2,
   AlertCircle,
   X,
+  LogOut,
+  UserCircle,
 } from "lucide-react";
 import InvoiceForm from "./components/InvoiceForm";
 import InvoicePreview from "./components/InvoicePreview";
 import InvoiceHistory from "./components/InvoiceHistory";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
 import {
   calculateInvoiceTotals,
   createEmptyItem,
@@ -39,6 +44,43 @@ const TABS = {
 };
 
 export default function App() {
+  // ── Auth State ──────────────────────────────────────────
+  const [user, setUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem("user");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const handleLogin = (userData) => setUser(userData);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+  };
+
+  // ── If not logged in, show auth routes ──────────────────
+  if (!user) {
+    return (
+      <Routes>
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/signup" element={<Signup onLogin={handleLogin} />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    );
+  }
+
+  // ── Logged-in dashboard ─────────────────────────────────
+  return <Dashboard user={user} onLogout={handleLogout} />;
+}
+
+// ══════════════════════════════════════════════════════════
+// Dashboard — the original App content, now auth-protected
+// ══════════════════════════════════════════════════════════
+function Dashboard({ user, onLogout }) {
   const [formData, setFormData] = useState({ ...INITIAL_FORM });
   const [activeTab, setActiveTab] = useState(TABS.CREATE);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -164,22 +206,39 @@ export default function App() {
           </div>
 
           {/* Tabs */}
-          <nav className="flex gap-1 rounded-xl bg-slate-100 p-1">
-            <button
-              className={tabCls(TABS.CREATE)}
-              onClick={() => setActiveTab(TABS.CREATE)}
-            >
-              <PlusCircle size={15} />
-              Create
-            </button>
-            <button
-              className={tabCls(TABS.HISTORY)}
-              onClick={() => setActiveTab(TABS.HISTORY)}
-            >
-              <History size={15} />
-              History
-            </button>
-          </nav>
+          <div className="flex items-center gap-3">
+            <nav className="flex gap-1 rounded-xl bg-slate-100 p-1">
+              <button
+                className={tabCls(TABS.CREATE)}
+                onClick={() => setActiveTab(TABS.CREATE)}
+              >
+                <PlusCircle size={15} />
+                Create
+              </button>
+              <button
+                className={tabCls(TABS.HISTORY)}
+                onClick={() => setActiveTab(TABS.HISTORY)}
+              >
+                <History size={15} />
+                History
+              </button>
+            </nav>
+
+            {/* User menu */}
+            <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
+              <UserCircle size={18} className="text-slate-400" />
+              <span className="hidden sm:inline text-xs font-medium text-slate-600 max-w-[120px] truncate">
+                {user.name}
+              </span>
+              <button
+                onClick={onLogout}
+                className="ml-1 rounded-lg p-1 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                title="Sign out"
+              >
+                <LogOut size={15} />
+              </button>
+            </div>
+          </div>
         </div>
       </header>
 

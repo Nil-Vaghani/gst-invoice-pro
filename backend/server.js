@@ -1,9 +1,12 @@
+const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
 const invoiceRoutes = require("./routes/invoiceRoutes");
+const authRoutes = require("./routes/authRoutes");
+const authMiddleware = require("./middleware/auth");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -50,7 +53,8 @@ app.use("/api", (req, res, next) => {
 });
 
 // Routes
-app.use("/api/invoices", invoiceRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/invoices", authMiddleware, invoiceRoutes);
 
 // Health check
 app.get("/", (req, res) => {
@@ -72,13 +76,11 @@ app.use((req, res) => {
 // Global error handler
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err.message);
-  res
-    .status(500)
-    .json({
-      success: false,
-      message: "Internal server error",
-      error: err.message,
-    });
+  res.status(500).json({
+    success: false,
+    message: "Internal server error",
+    error: err.message,
+  });
 });
 
 // Start server

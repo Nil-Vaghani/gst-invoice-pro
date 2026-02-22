@@ -1,0 +1,8 @@
+so i've some questions to ask
+so run terminal commands and there i'll write my question.
+after submitting my response only you should begin processing my question. your task is to analyse my query and process it in order to find it's answer.
+remember to give not in terminal but in your chat.
+then after completion of your answer, you'll again run terminal for my next question input.
+one more thing to add is whenever i stop you from running any terminal command, then immediately run --> Read-Host "any updates?"  in terminal so that i can help you with your response.
+we will repeat this process until i say "stop it" with the same case sensitivity on my response. let's start with the first question. hii, how are you?
+

@@ -5,7 +5,7 @@ const Invoice = require("../models/Invoice");
 // POST /api/invoices — Create and save a new invoice
 router.post("/", async (req, res) => {
   try {
-    const invoice = new Invoice(req.body);
+    const invoice = new Invoice({ ...req.body, user: req.user.id });
     const savedInvoice = await invoice.save();
     res.status(201).json({
       success: true,
@@ -32,7 +32,9 @@ router.post("/", async (req, res) => {
 // GET /api/invoices — Fetch all invoices (newest first)
 router.get("/", async (req, res) => {
   try {
-    const invoices = await Invoice.find().sort({ createdAt: -1 });
+    const invoices = await Invoice.find({ user: req.user.id }).sort({
+      createdAt: -1,
+    });
     res.status(200).json({
       success: true,
       count: invoices.length,
@@ -50,7 +52,10 @@ router.get("/", async (req, res) => {
 // GET /api/invoices/:id — Fetch a single invoice by ID
 router.get("/:id", async (req, res) => {
   try {
-    const invoice = await Invoice.findById(req.params.id);
+    const invoice = await Invoice.findOne({
+      _id: req.params.id,
+      user: req.user.id,
+    });
     if (!invoice) {
       return res.status(404).json({
         success: false,
@@ -73,7 +78,10 @@ router.get("/:id", async (req, res) => {
 // DELETE /api/invoices/:id — Delete a specific invoice
 router.delete("/:id", async (req, res) => {
   try {
-    const invoice = await Invoice.findByIdAndDelete(req.params.id);
+    const invoice = await Invoice.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user.id,
+    });
     if (!invoice) {
       return res.status(404).json({
         success: false,

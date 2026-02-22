@@ -121,6 +121,14 @@ const invoiceSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+
+    // Owner — links invoice to the logged-in user
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "Invoice must belong to a user"],
+      index: true,
+    },
   },
   {
     timestamps: true,
