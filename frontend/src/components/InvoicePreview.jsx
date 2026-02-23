@@ -98,11 +98,20 @@ export default function InvoicePreview({ formData, invoiceNumber }) {
 
   return (
     <div className="space-y-4 pb-4">
-      {/* Download Button */}
+      {/* Download Button — disabled until invoice is saved */}
       <button
         onClick={handleDownload}
-        disabled={isGenerating}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 hover:shadow hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+        disabled={!invoiceNumber || isGenerating}
+        title={
+          !invoiceNumber
+            ? "Save the invoice first to enable download"
+            : "Download invoice as PDF"
+        }
+        className={`flex w-full items-center justify-center gap-2 rounded-xl px-5 py-4 text-sm font-bold transition-all duration-300 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 ${
+          invoiceNumber
+            ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/40 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:-translate-y-1 active:shadow-md"
+            : "bg-white/5 text-white/30 border border-white/10"
+        }`}
       >
         {isGenerating ? (
           <>
@@ -112,14 +121,14 @@ export default function InvoicePreview({ formData, invoiceNumber }) {
         ) : (
           <>
             <Download size={16} />
-            Download PDF
+            {invoiceNumber ? "Download PDF" : "Save invoice to download"}
           </>
         )}
       </button>
 
       {/* PDF Error Banner */}
       {pdfError && (
-        <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-700 animate-fade-in">
+        <div className="flex items-center gap-2 rounded-lg border border-red-500/30 bg-red-500/10 backdrop-blur-sm px-4 py-2.5 text-sm text-red-300 animate-fade-in">
           <AlertCircle size={16} className="shrink-0" />
           {pdfError}
         </div>

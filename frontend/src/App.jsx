@@ -15,6 +15,7 @@ import InvoicePreview from "./components/InvoicePreview";
 import InvoiceHistory from "./components/InvoiceHistory";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import LandingPage from "./components/LandingPage";
 import {
   calculateInvoiceTotals,
   createEmptyItem,
@@ -66,9 +67,10 @@ export default function App() {
   if (!user) {
     return (
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/signup" element={<Signup onLogin={handleLogin} />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     );
   }
@@ -158,19 +160,26 @@ function Dashboard({ user, onLogout }) {
   const tabCls = (tab) =>
     `flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 ${
       activeTab === tab
-        ? "bg-white text-indigo-600 shadow-sm"
-        : "text-slate-500 hover:text-slate-700"
+        ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30"
+        : "text-white/50 hover:text-white/70 hover:bg-white/5"
     }`;
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50">
+    <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-[#0f0c29] via-[#1a1145] to-[#24243e] text-white">
+      {/* ── Ambient background orbs ── */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute -top-32 -right-32 h-[600px] w-[600px] rounded-full bg-blue-600/15 blur-[160px]" />
+        <div className="absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-violet-600/15 blur-[160px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-[350px] w-[350px] rounded-full bg-indigo-500/10 blur-[140px]" />
+      </div>
+
       {/* ── Toast Notification ─────────────────────────── */}
       {toast && (
         <div
-          className={`fixed right-6 top-6 z-50 flex items-center gap-3 animate-fade-in rounded-xl px-5 py-3.5 text-sm font-semibold shadow-xl backdrop-blur-sm ${
+          className={`fixed right-6 top-6 z-50 flex items-center gap-3 animate-fade-in rounded-xl px-5 py-3.5 text-sm font-semibold shadow-xl backdrop-blur-xl border ${
             toast.type === "error"
-              ? "bg-red-600 text-white"
-              : "bg-emerald-600 text-white"
+              ? "bg-red-500/20 border-red-500/30 text-red-300"
+              : "bg-emerald-500/20 border-emerald-500/30 text-emerald-300"
           }`}
         >
           {toast.type === "error" ? (
@@ -181,7 +190,7 @@ function Dashboard({ user, onLogout }) {
           <span>{toast.message}</span>
           <button
             onClick={() => setToast(null)}
-            className="ml-2 rounded-full p-0.5 transition-colors hover:bg-white/20"
+            className="ml-2 rounded-full p-0.5 transition-colors hover:bg-white/10"
           >
             <X size={14} />
           </button>
@@ -189,17 +198,17 @@ function Dashboard({ user, onLogout }) {
       )}
 
       {/* ── Navbar ─────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-white/5 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 shadow-md shadow-indigo-500/25">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30">
               <ReceiptText size={18} className="text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold tracking-tight text-slate-900">
-                GST Invoice<span className="text-indigo-600">Pro</span>
+              <h1 className="text-lg font-bold tracking-tight text-white">
+                GST Invoice<span className="text-indigo-400">Pro</span>
               </h1>
-              <p className="text-[10px] font-medium uppercase tracking-widest text-slate-400">
+              <p className="text-[10px] font-medium uppercase tracking-widest text-white/30">
                 Premium Invoice Generator
               </p>
             </div>
@@ -207,7 +216,7 @@ function Dashboard({ user, onLogout }) {
 
           {/* Tabs */}
           <div className="flex items-center gap-3">
-            <nav className="flex gap-1 rounded-xl bg-slate-100 p-1">
+            <nav className="flex gap-1 rounded-xl bg-white/5 border border-white/10 p-1">
               <button
                 className={tabCls(TABS.CREATE)}
                 onClick={() => setActiveTab(TABS.CREATE)}
@@ -225,14 +234,14 @@ function Dashboard({ user, onLogout }) {
             </nav>
 
             {/* User menu */}
-            <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
-              <UserCircle size={18} className="text-slate-400" />
-              <span className="hidden sm:inline text-xs font-medium text-slate-600 max-w-[120px] truncate">
+            <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+              <UserCircle size={18} className="text-white/40" />
+              <span className="hidden sm:inline text-xs font-medium text-white/60 max-w-[120px] truncate">
                 {user.name}
               </span>
               <button
                 onClick={onLogout}
-                className="ml-1 rounded-lg p-1 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                className="ml-1 rounded-lg p-1 text-white/30 transition-colors hover:bg-red-500/20 hover:text-red-400"
                 title="Sign out"
               >
                 <LogOut size={15} />
@@ -243,20 +252,20 @@ function Dashboard({ user, onLogout }) {
       </header>
 
       {/* ── Main Content ───────────────────────────────── */}
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="relative z-10 flex-1 container mx-auto px-4 py-8">
         {activeTab === TABS.CREATE ? (
           <>
             {/* New Invoice Button (reset) */}
             {invoiceNumber && (
-              <div className="mb-6 flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3">
-                <p className="text-sm text-emerald-700">
+              <div className="mb-6 flex items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-sm px-5 py-3">
+                <p className="text-sm text-emerald-300">
                   <span className="font-bold">✓ Invoice {invoiceNumber}</span>{" "}
                   saved successfully. Download it from the preview, or create a
                   new one.
                 </p>
                 <button
                   onClick={handleReset}
-                  className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-700"
+                  className="flex items-center gap-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/30 px-4 py-2 text-xs font-bold text-emerald-300 hover:bg-emerald-500/30 transition-colors"
                 >
                   <PlusCircle size={13} />
                   New Invoice
@@ -288,7 +297,7 @@ function Dashboard({ user, onLogout }) {
       </main>
 
       {/* ── Footer ─────────────────────────────────────── */}
-      <footer className="border-t border-slate-200/80 bg-white py-5 text-center text-xs text-slate-400">
+      <footer className="relative z-10 border-t border-white/10 py-5 text-center text-xs text-white/30">
         © {new Date().getFullYear()} GST InvoicePro — Built for Indian
         Businesses.
       </footer>

@@ -7,29 +7,31 @@ import {
   Loader2,
   Eye,
   EyeOff,
-  Smartphone,
-  Chrome,
+  ArrowRight,
 } from "lucide-react";
 import { loginUser, socialLogin } from "../utils/api";
-import {
-  signInWithGoogle,
-  signInWithMicrosoft,
-  signInWithApple,
-} from "../utils/firebaseAuth";
-import PhoneAuthModal from "./PhoneAuthModal";
+import { signInWithGoogle } from "../utils/firebaseAuth";
 
-// ── Inline SVG icons for social buttons ───────────────────
-const MicrosoftIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 21 21">
-    <rect x="1" y="1" width="9" height="9" fill="#F25022" />
-    <rect x="11" y="1" width="9" height="9" fill="#7FBA00" />
-    <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
-    <rect x="11" y="11" width="9" height="9" fill="#FFB900" />
-  </svg>
-);
-const AppleIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
+// ── Google "G" logo — official multicolor mark ────────────
+const GoogleIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 48 48">
+    <path
+      fill="#EA4335"
+      d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+    />
+    <path
+      fill="#4285F4"
+      d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+    />
+    <path
+      fill="#FBBC05"
+      d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.01 24.01 0 0 0 0 21.56l7.98-6.19z"
+    />
+    <path
+      fill="#34A853"
+      d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+    />
+    <path fill="none" d="M0 0h48v48H0z" />
   </svg>
 );
 
@@ -38,10 +40,10 @@ export default function Login({ onLogin }) {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [socialLoading, setSocialLoading] = useState(null); // "google" | "microsoft" | "apple" | null
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showPhoneModal, setShowPhoneModal] = useState(false);
 
+  // ── Email / Password login ────────────────────────────
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -59,157 +61,100 @@ export default function Login({ onLogin }) {
     }
   };
 
-  const inputCls =
-    "w-full rounded-xl border border-slate-200 bg-slate-50/80 pl-11 pr-4 py-3 text-sm text-slate-900 transition-all duration-200 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 hover:border-slate-300";
-
-  // ── Social login handler ──────────────────────────────
-  const handleSocial = async (provider, signInFn) => {
+  // ── Google login via Firebase signInWithPopup ─────────
+  const handleGoogleLogin = async () => {
     setError(null);
-    setSocialLoading(provider);
+    setGoogleLoading(true);
     try {
-      const firebaseResult = await signInFn();
+      const firebaseResult = await signInWithGoogle();
       const res = await socialLogin(firebaseResult.idToken);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       onLogin(res.data.user);
       navigate("/", { replace: true });
     } catch (err) {
-      // User closed popup — don't show error
       if (err?.code === "auth/popup-closed-by-user") return;
       if (err?.code === "auth/cancelled-popup-request") return;
-      setError(err.message || `${provider} sign-in failed. Please try again.`);
+      setError(err.message || "Google sign-in failed. Please try again.");
     } finally {
-      setSocialLoading(null);
+      setGoogleLoading(false);
     }
   };
 
-  // ── Phone OTP success handler ─────────────────────────
-  const handlePhoneSuccess = async ({ idToken }) => {
-    setError(null);
-    setSocialLoading("phone");
-    try {
-      const res = await socialLogin(idToken);
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      onLogin(res.data.user);
-      navigate("/", { replace: true });
-    } catch (err) {
-      setError(err.message || "Phone sign-in failed.");
-    } finally {
-      setSocialLoading(null);
-      setShowPhoneModal(false);
-    }
-  };
-
-  const socialCls =
-    "flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-all duration-200 hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm active:scale-[0.98]";
+  // ── Dark Glowing Input Style ────────────────────────────
+  const inputCls =
+    "w-full rounded-xl border border-white/10 bg-black/20 pl-11 pr-4 py-3.5 text-sm text-white shadow-inner transition-all duration-300 placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:shadow-[0_0_15px_rgba(99,102,241,0.5)] focus:border-indigo-500/50 hover:bg-black/30";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-100 via-slate-50 to-indigo-50/30 px-4 py-10">
-      {/* Background blurs */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 right-0 h-[500px] w-[500px] rounded-full bg-indigo-100/50 blur-3xl" />
-        <div className="absolute bottom-0 -left-32 h-[400px] w-[400px] rounded-full bg-blue-100/40 blur-3xl" />
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#0f0c29] via-[#1a1145] to-[#24243e] px-4 py-10">
+      {/* Ambient background orbs */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute -top-32 -right-32 h-[600px] w-[600px] rounded-full bg-blue-600/20 blur-[160px] animate-pulse" />
+        <div className="absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-violet-600/20 blur-[160px] animate-pulse [animation-delay:2s]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-[350px] w-[350px] rounded-full bg-indigo-500/15 blur-[140px] animate-pulse [animation-delay:4s]" />
       </div>
 
-      <div className="relative w-full max-w-[420px]">
-        {/* Branding */}
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600 shadow-lg shadow-indigo-500/25">
-            <ReceiptText size={22} className="text-white" />
+      <div className="relative z-10 w-full max-w-[440px]">
+        {/* ── Branding ── */}
+        <div className="mb-10 text-center">
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-xl shadow-indigo-500/40 ring-2 ring-white/20">
+            <ReceiptText size={28} className="text-white drop-shadow-sm" />
           </div>
-          <h1 className="text-[22px] font-bold tracking-tight text-slate-900">
-            Sign in to <span className="text-indigo-600">InvoicePro</span>
+          <h1 className="text-2xl font-extrabold tracking-tight text-white">
+            Welcome back to{" "}
+            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              InvoicePro
+            </span>
           </h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Welcome back — pick up where you left off
+          <p className="mt-2 text-sm font-medium text-white/50">
+            Sign in to manage your invoices & GST calculations
           </p>
         </div>
 
-        {/* Card */}
-        <div className="rounded-2xl border border-slate-200/70 bg-white p-7 shadow-[0_2px_20px_-4px_rgba(0,0,0,0.06)]">
-          {/* Social Logins */}
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              className={socialCls}
-              disabled={!!socialLoading}
-              onClick={() => handleSocial("google", signInWithGoogle)}
-            >
-              {socialLoading === "google" ? (
-                <Loader2 size={16} className="animate-spin text-slate-400" />
-              ) : (
-                <Chrome size={18} className="text-slate-500" />
-              )}
-              Google
-            </button>
-            <button
-              type="button"
-              className={socialCls}
-              disabled={!!socialLoading}
-              onClick={() => handleSocial("microsoft", signInWithMicrosoft)}
-            >
-              {socialLoading === "microsoft" ? (
-                <Loader2 size={16} className="animate-spin text-slate-400" />
-              ) : (
-                <MicrosoftIcon />
-              )}
-              Microsoft
-            </button>
-            <button
-              type="button"
-              className={socialCls}
-              disabled={!!socialLoading}
-              onClick={() => handleSocial("apple", signInWithApple)}
-            >
-              {socialLoading === "apple" ? (
-                <Loader2 size={16} className="animate-spin text-slate-400" />
-              ) : (
-                <AppleIcon />
-              )}
-              Apple
-            </button>
-            <button
-              type="button"
-              className={socialCls}
-              disabled={!!socialLoading}
-              onClick={() => setShowPhoneModal(true)}
-            >
-              {socialLoading === "phone" ? (
-                <Loader2 size={16} className="animate-spin text-slate-400" />
-              ) : (
-                <Smartphone size={18} className="text-slate-500" />
-              )}
-              Mobile
-            </button>
-          </div>
+        {/* ── Glassmorphic Card ── */}
+        <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 shadow-2xl">
+          {/* ── Google Button ── */}
+          <button
+            type="button"
+            disabled={googleLoading}
+            onClick={handleGoogleLogin}
+            className="group flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm px-5 py-4 text-sm font-bold text-white/90 transition-all duration-300 hover:bg-white/10 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:-translate-y-1 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {googleLoading ? (
+              <Loader2 size={20} className="animate-spin text-white/40" />
+            ) : (
+              <GoogleIcon />
+            )}
+            Continue with Google
+          </button>
 
-          {/* OR Divider */}
-          <div className="my-6 flex items-center gap-3">
-            <div className="h-px flex-1 bg-slate-200" />
-            <span className="text-xs font-medium uppercase tracking-wider text-slate-400">
-              or continue with email
+          {/* ── OR Divider ── */}
+          <div className="my-7 flex items-center gap-4">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">
+              or
             </span>
-            <div className="h-px flex-1 bg-slate-200" />
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/15 to-transparent" />
           </div>
 
-          {/* Error */}
+          {/* ── Error ── */}
           {error && (
-            <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-600 animate-fade-in">
-              {error}
+            <div className="mb-5 flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 backdrop-blur-sm px-4 py-3 text-sm text-red-300 shadow-sm">
+              <span className="mt-0.5 shrink-0">⚠</span>
+              <span>{error}</span>
             </div>
           )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* ── Email / Password Form ── */}
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Email
+              <label className="mb-2 block text-[11px] font-bold uppercase tracking-widest text-white/40">
+                Email address
               </label>
               <div className="relative">
                 <Mail
                   size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
                 />
                 <input
                   type="email"
@@ -226,13 +171,13 @@ export default function Login({ onLogin }) {
             </div>
 
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
+              <label className="mb-2 block text-[11px] font-bold uppercase tracking-widest text-white/40">
                 Password
               </label>
               <div className="relative">
                 <Lock
                   size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
                 />
                 <input
                   type={showPassword ? "text" : "password"}
@@ -249,7 +194,7 @@ export default function Login({ onLogin }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -257,10 +202,11 @@ export default function Login({ onLogin }) {
               </div>
             </div>
 
+            {/* ── Neon Sign In Button ── */}
             <button
               type="submit"
               disabled={loading}
-              className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 hover:shadow hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+              className="group mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-indigo-500/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:-translate-y-1 active:translate-y-0 active:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
             >
               {loading ? (
                 <>
@@ -268,30 +214,29 @@ export default function Login({ onLogin }) {
                   Signing in…
                 </>
               ) : (
-                "Sign In"
+                <>
+                  Sign In
+                  <ArrowRight
+                    size={16}
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                </>
               )}
             </button>
           </form>
         </div>
 
         {/* Footer */}
-        <p className="mt-6 text-center text-sm text-slate-500">
+        <p className="mt-8 text-center text-sm font-medium text-white/40">
           Don't have an account?{" "}
           <Link
             to="/signup"
-            className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+            className="font-bold text-indigo-400 hover:text-indigo-300 transition-colors hover:underline underline-offset-4 decoration-indigo-500/50"
           >
             Create one free
           </Link>
         </p>
       </div>
-
-      {/* Phone Auth Modal */}
-      <PhoneAuthModal
-        open={showPhoneModal}
-        onClose={() => setShowPhoneModal(false)}
-        onSuccess={handlePhoneSuccess}
-      />
     </div>
   );
 }
