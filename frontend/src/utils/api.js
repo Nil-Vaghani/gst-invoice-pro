@@ -115,7 +115,7 @@ export async function saveInvoice(invoiceData) {
   if (res.status === 401) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    window.location.href = "/login";
+    window.dispatchEvent(new CustomEvent("auth:logout"));
     throw new Error("Session expired. Please log in again.");
   }
   if (!res.ok) {
@@ -140,7 +140,7 @@ export async function fetchInvoices() {
   if (res.status === 401) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    window.location.href = "/login";
+    window.dispatchEvent(new CustomEvent("auth:logout"));
     throw new Error("Session expired. Please log in again.");
   }
   if (!res.ok) {
@@ -166,7 +166,7 @@ export async function deleteInvoice(id) {
   if (res.status === 401) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    window.location.href = "/login";
+    window.dispatchEvent(new CustomEvent("auth:logout"));
     throw new Error("Session expired. Please log in again.");
   }
   if (!res.ok) {

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import {
   ReceiptText,
@@ -62,6 +62,13 @@ export default function App() {
     localStorage.removeItem("user");
     setUser(null);
   };
+
+  // ── Listen for global 401 logout events from api.js ──────
+  useEffect(() => {
+    const onAuthLogout = () => setUser(null);
+    window.addEventListener("auth:logout", onAuthLogout);
+    return () => window.removeEventListener("auth:logout", onAuthLogout);
+  }, []);
 
   // ── If not logged in, show auth routes ──────────────────
   if (!user) {
