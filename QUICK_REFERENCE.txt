@@ -1,0 +1,222 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║      GST INVOICEPRO - QUICK REFERENCE CARD FOR DEVELOPERS        ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+🚀 QUICK START (First Time Setup):
+──────────────────────────────────────────────────────────────────
+
+1. Read SETUP.md (5 min)
+2. cp .env.example .env
+3. Edit .env with your MongoDB connection & settings
+4. cd backend && npm install && npm run dev
+5. cd ../frontend && npm install && npm run dev
+6. Open http://localhost:5173
+
+⏱️  Total Time: ~10 minutes
+
+──────────────────────────────────────────────────────────────────
+
+📚 WHERE TO FIND WHAT:
+──────────────────────────────────────────────────────────────────
+
+Problem                     → Read This
+──────────────────────────────────────────────────────────────────
+How do I get started?       → SETUP.md
+What does this do?          → README.md
+How does the API work?      → API.md
+Is this secure?             → SECURITY.md
+Need help navigating?       → INDEX.md
+Backend specific help?      → backend/README.md
+Frontend specific help?     → frontend/README.md
+What are variables?         → .env.example
+It's broken!               → README.md → Troubleshooting
+
+──────────────────────────────────────────────────────────────────
+
+🔧 COMMON COMMANDS:
+──────────────────────────────────────────────────────────────────
+
+Backend (from backend/ folder):
+  npm install              # Install dependencies
+  npm run dev              # Start dev server (auto-reload)
+  npm start                # Start production server
+
+Frontend (from frontend/ folder):
+  npm install              # Install dependencies
+  npm run dev              # Start dev server with Vite
+  npm run build            # Create production build
+  npm run preview          # Preview production build
+
+Git:
+  git add .                # Stage all changes
+  git commit -m "message"  # Commit changes
+  git push                 # Push to remote
+
+──────────────────────────────────────────────────────────────────
+
+📝 KEY ENVIRONMENT VARIABLES:
+──────────────────────────────────────────────────────────────────
+
+Backend (.env):
+  MONGODB_URI             → Database connection string
+  PORT                    → Server port (default: 5001)
+  JWT_SECRET              → Token signing key
+
+Frontend (.env):
+  VITE_API_BASE_URL       → Backend API URL
+  VITE_FIREBASE_*         → Firebase credentials
+
+──────────────────────────────────────────────────────────────────
+
+🌐 API ENDPOINTS:
+──────────────────────────────────────────────────────────────────
+
+Authentication:
+  POST /api/auth/signup            → Register user
+  POST /api/auth/login             → Login user
+
+Invoices (require JWT token):
+  GET  /api/invoices               → Get all invoices
+  POST /api/invoices               → Create invoice
+  GET  /api/invoices/:id           → Get one invoice
+  PUT  /api/invoices/:id           → Update invoice
+  DELETE /api/invoices/:id         → Delete invoice
+
+Health:
+  GET  /                           → Health check
+
+Full docs: See API.md
+
+──────────────────────────────────────────────────────────────────
+
+🔒 SECURITY CHECKLIST (Before Production):
+──────────────────────────────────────────────────────────────────
+
+□ .env file is in .gitignore
+□ Never commit .env to git
+□ JWT_SECRET is strong & random
+□ CORS is configured for your domain
+□ MongoDB IP is whitelisted
+□ HTTPS is enabled in production
+□ Input validation is in place
+□ Rate limiting is configured
+□ Sensitive errors are hidden from users
+□ All API keys are rotated/reset
+
+See SECURITY.md for full checklist
+
+──────────────────────────────────────────────────────────────────
+
+📂 PROJECT STRUCTURE:
+──────────────────────────────────────────────────────────────────
+
+GST Calculator/
+├── README.md             ← Full project docs
+├── SETUP.md              ← Quick start guide
+├── API.md                ← API reference
+├── SECURITY.md           ← Security guide
+├── INDEX.md              ← Navigation guide
+├── .env.example          ← Configuration template
+│
+├── backend/              ← Node.js/Express
+│   ├── server.js         ← Main entry point
+│   ├── routes/           ← API endpoints
+│   ├── models/           ← MongoDB schemas
+│   └── middleware/       ← Auth, errors
+│
+└── frontend/             ← React/Vite
+    ├── src/components/   ← React components
+    ├── src/utils/        ← Helper functions
+    └── public/           ← Static files
+
+──────────────────────────────────────────────────────────────────
+
+🛠️  TROUBLESHOOTING QUICK FIXES:
+──────────────────────────────────────────────────────────────────
+
+MongoDB won't connect:
+  → Check MONGODB_URI in .env
+  → Verify IP is whitelisted in Atlas
+
+Port already in use:
+  → Change PORT in .env
+  → Or kill existing process
+
+Dependencies missing:
+  → rm -rf node_modules package-lock.json
+  → npm install
+
+Blank page on load:
+  → Check browser console (F12)
+  → Make sure backend is running
+  → Verify VITE_API_BASE_URL
+
+More help: See README.md → Troubleshooting section
+
+──────────────────────────────────────────────────────────────────
+
+📞 GETTING HELP:
+──────────────────────────────────────────────────────────────────
+
+1. Check relevant README (by role)
+2. Check Troubleshooting section
+3. Check INDEX.md for navigation
+4. Look at code comments
+5. Check API.md for endpoint details
+
+──────────────────────────────────────────────────────────────────
+
+✨ KEY TECH STACK:
+──────────────────────────────────────────────────────────────────
+
+Backend:  Node.js 20.20.0, Express 4.21.2, MongoDB 8.9.5
+Frontend: React 18.3.1, Vite 6.0.7, Tailwind CSS 3.4.17
+Auth:     JWT + bcryptjs + Firebase (optional)
+
+──────────────────────────────────────────────────────────────────
+
+📊 GST RATES SUPPORTED:
+──────────────────────────────────────────────────────────────────
+
+0%    → Exempt goods
+5%    → Essential items
+12%   → Standard items
+18%   → Premium items
+
+──────────────────────────────────────────────────────────────────
+
+🎯 NEXT STEPS AFTER SETUP:
+──────────────────────────────────────────────────────────────────
+
+1. Create a test invoice
+2. Download as PDF
+3. Check database records
+4. Review API responses
+5. Test error scenarios
+6. Try adding/editing invoices
+7. Test logout & login
+8. Review code organization
+
+──────────────────────────────────────────────────────────────────
+
+💡 TIPS:
+──────────────────────────────────────────────────────────────────
+
+✓ Use two terminals (one for backend, one for frontend)
+✓ Keep both services running during development
+✓ Browser F12 console shows API errors
+✓ Check backend logs for server errors
+✓ Use API.md examples to test endpoints
+✓ Read .env.example to understand config
+✓ Keep .env file secure - never commit!
+
+──────────────────────────────────────────────────────────────────
+
+Happy Coding! 🚀
+
+Questions? Check the full documentation in:
+  - README.md (main)
+  - INDEX.md (navigation)
+  - Specific role guides in backend/ & frontend/
+
+═══════════════════════════════════════════════════════════════════
