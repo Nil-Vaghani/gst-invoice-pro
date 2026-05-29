@@ -36,11 +36,7 @@ cd "GST Calculator"
 
 2. Edit `.env` with your credentials:
 
-   ```bash
-   # On Mac/Linux
-   nano .env
-
-   # On Windows (PowerShell)
+   ```powershell
    notepad .env
    ```
 
@@ -142,12 +138,12 @@ Edit `.env` file with these variables:
 **Problem**: Another app is using port 5001
 **Fix**:
 
-```bash
+```powershell
 # Find process ID on port 5001
-lsof -ti:5001
+netstat -ano | findstr :5001
 
-# Kill the process (replace PID with actual number)
-kill -9 <PID>
+# Kill the process (replace PID with the number shown in the last column)
+taskkill /F /PID <PID>
 
 # OR change PORT in .env
 PORT=5002
@@ -158,10 +154,10 @@ PORT=5002
 **Problem**: Dependencies not installed
 **Fix**:
 
-```bash
+```powershell
 # Clear cache and reinstall
 npm cache clean --force
-rm -rf node_modules package-lock.json
+Remove-Item -Recurse -Force node_modules, package-lock.json
 npm install
 ```
 
@@ -177,10 +173,10 @@ npm install
 ### ❌ "Cannot write to project folder"
 
 **Problem**: Permission issues
-**Fix**: Run with sudo (Mac/Linux)
+**Fix**: Open PowerShell as Administrator (right-click PowerShell -> Run as Administrator) and rerun:
 
-```bash
-sudo npm install
+```powershell
+npm install
 ```
 
 ## 🎯 Next Steps

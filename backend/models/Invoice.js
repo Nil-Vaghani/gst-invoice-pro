@@ -1,5 +1,15 @@
+/**
+ * @fileoverview Invoice Data Model Schema
+ * Defines the MongoDB schema for invoices including nested line items,
+ * GST rates, mathematical validations, and an auto-generated invoice number.
+ * @module models/Invoice
+ */
+
 const mongoose = require("mongoose");
 
+/**
+ * Nested schema for individual invoice items (products/services)
+ */
 const itemSchema = new mongoose.Schema({
   productName: {
     type: String,

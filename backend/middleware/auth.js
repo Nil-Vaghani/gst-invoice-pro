@@ -1,9 +1,21 @@
+/**
+ * @fileoverview Authentication Middleware
+ * Validates JSON Web Tokens (JWT) from incoming API requests.
+ * @module middleware/auth
+ */
+
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 /**
- * Protect routes — verifies JWT from Authorization header.
- * Attaches `req.user` (id, name, email) for downstream use.
+ * Protect routes by verifying JWTs present in the Authorization header.
+ * Upon successful verification, attaches minimal user info (id, name, email)
+ * to the `req.user` object for downstream use without additional DB hits.
+ *
+ * @function authMiddleware
+ * @param {Object} req - Express Request object
+ * @param {Object} res - Express Response object
+ * @param {Function} next - Express Next middleware function
  */
 module.exports = async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;

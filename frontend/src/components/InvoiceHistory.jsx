@@ -222,7 +222,7 @@ export default function InvoiceHistory({ refreshKey = 0 }) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-500/20 border-t-indigo-500"></div>
-        <p className="mt-3 text-sm text-white/50">Loading invoices…</p>
+        <p className="mt-3 text-sm text-slate-400">Loading invoices…</p>
       </div>
     );
   }
@@ -248,11 +248,11 @@ export default function InvoiceHistory({ refreshKey = 0 }) {
   if (invoices.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/15 py-16">
-        <Clock size={36} className="text-white/20" />
-        <p className="mt-3 text-sm font-semibold text-white/50">
+        <Clock size={36} className="text-slate-900/20" />
+        <p className="mt-3 text-sm font-semibold text-slate-400">
           No invoices yet
         </p>
-        <p className="mt-1 text-xs text-white/30">
+        <p className="mt-1 text-xs text-slate-300">
           Create your first invoice using the form above.
         </p>
       </div>
@@ -263,12 +263,12 @@ export default function InvoiceHistory({ refreshKey = 0 }) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-white/60">
+        <h3 className="text-sm font-bold text-slate-500">
           {invoices.length} Invoice(s)
         </h3>
         <button
           onClick={loadInvoices}
-          className="flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/50 transition-colors hover:bg-white/10 hover:text-white/70"
+          className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600"
         >
           <RefreshCcw size={12} />
           Refresh
@@ -280,35 +280,35 @@ export default function InvoiceHistory({ refreshKey = 0 }) {
         return (
           <div
             key={inv._id}
-            className="overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl transition-all hover:shadow-[0_0_30px_rgba(99,102,241,0.1)]"
+            className="overflow-hidden rounded-xl border border-slate-200 bg-white backdrop-blur-xl shadow-2xl transition-all hover:shadow-[0_0_30px_rgba(99,102,241,0.1)]"
           >
             {/* Summary Row */}
             <div
               onClick={() => toggleExpand(inv._id)}
-              className="flex cursor-pointer items-center justify-between px-5 py-4 transition-colors hover:bg-white/5"
+              className="flex cursor-pointer items-center justify-between px-5 py-4 transition-colors hover:bg-white"
             >
               <div className="flex items-center gap-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-500/10 ring-1 ring-indigo-500/20">
-                  <IndianRupee size={18} className="text-indigo-400" />
+                  <IndianRupee size={18} className="text-indigo-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-white/90">
+                  <p className="text-sm font-bold text-slate-900/90">
                     {inv.invoiceNumber || "INV-XXXX"}
                   </p>
-                  <p className="text-xs text-white/40">
+                  <p className="text-xs text-slate-400">
                     {inv.clientName} &middot;{" "}
                     {formatDate(inv.invoiceDate || inv.createdAt)}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-sm font-extrabold text-white/90">
+                <span className="text-sm font-extrabold text-slate-900/90">
                   {formatINR(inv.grandTotal)}
                 </span>
                 {isExpanded ? (
-                  <ChevronUp size={16} className="text-white/30" />
+                  <ChevronUp size={16} className="text-slate-300" />
                 ) : (
-                  <ChevronDown size={16} className="text-white/30" />
+                  <ChevronDown size={16} className="text-slate-300" />
                 )}
               </div>
             </div>
@@ -318,38 +318,38 @@ export default function InvoiceHistory({ refreshKey = 0 }) {
               <div className="border-t border-white/5 bg-white/[0.03] px-5 py-4">
                 <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
                   <div>
-                    <span className="font-semibold text-white/30">
+                    <span className="font-semibold text-slate-300">
                       Business:
                     </span>{" "}
-                    <span className="text-white/60">{inv.businessName}</span>
+                    <span className="text-slate-500">{inv.businessName}</span>
                   </div>
                   <div>
-                    <span className="font-semibold text-white/30">Client:</span>{" "}
-                    <span className="text-white/60">{inv.clientName}</span>
+                    <span className="font-semibold text-slate-300">Client:</span>{" "}
+                    <span className="text-slate-500">{inv.clientName}</span>
                   </div>
                   <div>
-                    <span className="font-semibold text-white/30">
+                    <span className="font-semibold text-slate-300">
                       GST Rate:
                     </span>{" "}
-                    <span className="text-white/60">{inv.gstRate}%</span>
+                    <span className="text-slate-500">{inv.gstRate}%</span>
                   </div>
                   <div>
-                    <span className="font-semibold text-white/30">
+                    <span className="font-semibold text-slate-300">
                       Subtotal:
                     </span>{" "}
-                    <span className="text-white/60">
+                    <span className="text-slate-500">
                       {formatINR(inv.subTotal)}
                     </span>
                   </div>
                   <div>
-                    <span className="font-semibold text-white/30">CGST:</span>{" "}
-                    <span className="text-white/60">
+                    <span className="font-semibold text-slate-300">CGST:</span>{" "}
+                    <span className="text-slate-500">
                       {formatINR(inv.cgstAmount)}
                     </span>
                   </div>
                   <div>
-                    <span className="font-semibold text-white/30">SGST:</span>{" "}
-                    <span className="text-white/60">
+                    <span className="font-semibold text-slate-300">SGST:</span>{" "}
+                    <span className="text-slate-500">
                       {formatINR(inv.sgstAmount)}
                     </span>
                   </div>
@@ -358,19 +358,19 @@ export default function InvoiceHistory({ refreshKey = 0 }) {
                 {/* Items */}
                 {inv.items && inv.items.length > 0 && (
                   <div className="mt-3">
-                    <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-white/30">
+                    <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-slate-300">
                       Items
                     </p>
                     <div className="space-y-1">
                       {inv.items.map((item, i) => (
                         <div
                           key={i}
-                          className="flex items-center justify-between rounded-md bg-white/[0.03] px-3 py-1.5 text-xs transition-colors hover:bg-white/5"
+                          className="flex items-center justify-between rounded-md bg-white/[0.03] px-3 py-1.5 text-xs transition-colors hover:bg-white"
                         >
-                          <span className="text-white/60">
+                          <span className="text-slate-500">
                             {item.productName} &times; {item.quantity}
                           </span>
-                          <span className="font-semibold text-white/80">
+                          <span className="font-semibold text-slate-700">
                             {formatINR(item.amount)}
                           </span>
                         </div>
@@ -386,7 +386,7 @@ export default function InvoiceHistory({ refreshKey = 0 }) {
                       handleDownloadPdf(inv);
                     }}
                     disabled={downloadingId === inv._id}
-                    className="flex items-center gap-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-400 transition-all hover:bg-indigo-500/20 hover:shadow-[0_0_15px_rgba(99,102,241,0.3)] disabled:opacity-50"
+                    className="flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-600 transition-all hover:bg-indigo-500/20 hover:shadow-[0_0_15px_rgba(99,102,241,0.3)] disabled:opacity-50"
                   >
                     {downloadingId === inv._id ? (
                       <Loader2 size={13} className="animate-spin" />
@@ -416,22 +416,22 @@ export default function InvoiceHistory({ refreshKey = 0 }) {
       {/* ── Delete Confirmation Modal ─────────────────────── */}
       {confirmDeleteId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#1a1145]/95 backdrop-blur-xl p-6 shadow-2xl">
-            <h4 className="text-base font-bold text-white">Delete Invoice?</h4>
-            <p className="mt-1 text-sm text-white/50">
+          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-[#1a1145]/95 backdrop-blur-xl p-6 shadow-2xl">
+            <h4 className="text-base font-bold text-slate-900">Delete Invoice?</h4>
+            <p className="mt-1 text-sm text-slate-400">
               This action cannot be undone. The invoice will be permanently
               removed.
             </p>
             <div className="mt-5 flex justify-end gap-3">
               <button
                 onClick={cancelDelete}
-                className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/60 transition-colors hover:bg-white/10"
+                className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-500 transition-colors hover:bg-slate-50"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmDelete}
-                className="rounded-lg bg-red-500/80 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]"
+                className="rounded-lg bg-red-500/80 px-4 py-2 text-sm font-semibold text-slate-900 transition-all hover:bg-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]"
               >
                 Delete
               </button>

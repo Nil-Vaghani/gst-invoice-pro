@@ -167,12 +167,12 @@ function Dashboard({ user, onLogout }) {
   const tabCls = (tab) =>
     `flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 ${
       activeTab === tab
-        ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30"
-        : "text-white/50 hover:text-white/70 hover:bg-white/5"
+        ? "bg-slate-900 text-white shadow-sm"
+        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
     }`;
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-[#0f0c29] via-[#1a1145] to-[#24243e] text-white">
+    <div className="relative flex min-h-screen flex-col bg-slate-50 text-slate-900 border-t-4 border-slate-900">
       {/* ── Ambient background orbs ── */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -top-32 -right-32 h-[600px] w-[600px] rounded-full bg-blue-600/15 blur-[160px]" />
@@ -212,10 +212,10 @@ function Dashboard({ user, onLogout }) {
               <ReceiptText size={18} className="text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold tracking-tight text-white">
-                GST Invoice<span className="text-indigo-400">Pro</span>
+              <h1 className="text-lg font-bold tracking-tight text-slate-900">
+                GST Invoice<span className="text-indigo-600">Pro</span>
               </h1>
-              <p className="text-[10px] font-medium uppercase tracking-widest text-white/30">
+              <p className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
                 Premium Invoice Generator
               </p>
             </div>
@@ -223,7 +223,7 @@ function Dashboard({ user, onLogout }) {
 
           {/* Tabs */}
           <div className="flex items-center gap-3">
-            <nav className="flex gap-1 rounded-xl bg-white/5 border border-white/10 p-1">
+            <nav className="flex gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
               <button
                 className={tabCls(TABS.CREATE)}
                 onClick={() => setActiveTab(TABS.CREATE)}
@@ -241,14 +241,14 @@ function Dashboard({ user, onLogout }) {
             </nav>
 
             {/* User menu */}
-            <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-              <UserCircle size={18} className="text-white/40" />
-              <span className="hidden sm:inline text-xs font-medium text-white/60 max-w-[120px] truncate">
+            <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
+              <UserCircle size={18} className="text-slate-400" />
+              <span className="hidden sm:inline text-xs font-medium text-slate-600 max-w-[120px] truncate">
                 {user.name}
               </span>
               <button
                 onClick={onLogout}
-                className="ml-1 rounded-lg p-1 text-white/30 transition-colors hover:bg-red-500/20 hover:text-red-400"
+                className="ml-1 flex items-center justify-center rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
                 title="Sign out"
               >
                 <LogOut size={15} />
@@ -304,7 +304,7 @@ function Dashboard({ user, onLogout }) {
       </main>
 
       {/* ── Footer ─────────────────────────────────────── */}
-      <footer className="relative z-10 border-t border-white/10 py-5 text-center text-xs text-white/30">
+      <footer className="relative z-10 border-t border-slate-200 py-5 text-center text-xs text-slate-500">
         © {new Date().getFullYear()} GST InvoicePro — Built for Indian
         Businesses.
       </footer>

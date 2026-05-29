@@ -50,18 +50,18 @@ export default function InvoiceForm({
 
   // ── Dark Glowing Input & Label classes ────────────────
   const inputCls =
-    "w-full rounded-xl border border-white/10 bg-black/20 px-4 py-2.5 text-sm text-white transition-all duration-300 placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:shadow-[0_0_15px_rgba(99,102,241,0.5)] focus:border-indigo-500/50 hover:bg-black/30";
+    "w-full rounded-xl border border-slate-200 bg-white border border-slate-300 shadow-sm px-4 py-2.5 text-sm text-slate-900 transition-all duration-300 placeholder:text-slate-900/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:shadow-[0_0_15px_rgba(99,102,241,0.5)] focus:border-indigo-500/50 hover:bg-black/30";
   const labelCls =
-    "mb-1.5 block text-[11px] font-bold uppercase tracking-widest text-white/40";
+    "mb-1.5 block text-[11px] font-bold uppercase tracking-widest text-slate-900/40";
 
   const gstRate = Number(formData.gstRate) || 0;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* ── Business Details ──────────────────────────── */}
-      <fieldset className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-2xl transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]">
-        <legend className="flex items-center gap-2 px-1 text-sm font-semibold tracking-tight text-white">
-          <Building2 size={16} className="text-indigo-400" />
+      <fieldset className="rounded-2xl border border-slate-200 bg-white shadow-sm backdrop-blur-xl p-6 shadow-2xl transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]">
+        <legend className="flex items-center gap-2 px-1 text-sm font-semibold tracking-tight text-slate-900">
+          <Building2 size={16} className="text-slate-700" />
           Your Business Details
         </legend>
         <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -119,9 +119,9 @@ export default function InvoiceForm({
       </fieldset>
 
       {/* ── Client Details ────────────────────────────── */}
-      <fieldset className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-2xl transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]">
-        <legend className="flex items-center gap-2 px-1 text-sm font-semibold tracking-tight text-white">
-          <User size={16} className="text-indigo-400" />
+      <fieldset className="rounded-2xl border border-slate-200 bg-white shadow-sm backdrop-blur-xl p-6 shadow-2xl transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]">
+        <legend className="flex items-center gap-2 px-1 text-sm font-semibold tracking-tight text-slate-900">
+          <User size={16} className="text-slate-700" />
           Client / Bill To
         </legend>
         <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -169,9 +169,9 @@ export default function InvoiceForm({
       </fieldset>
 
       {/* ── Line Items ────────────────────────────────── */}
-      <fieldset className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-2xl transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]">
-        <legend className="flex items-center gap-2 px-1 text-sm font-semibold tracking-tight text-white">
-          <Package size={16} className="text-indigo-400" />
+      <fieldset className="rounded-2xl border border-slate-200 bg-white shadow-sm backdrop-blur-xl p-6 shadow-2xl transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]">
+        <legend className="flex items-center gap-2 px-1 text-sm font-semibold tracking-tight text-slate-900">
+          <Package size={16} className="text-slate-700" />
           Items / Services
         </legend>
 
@@ -237,7 +237,7 @@ export default function InvoiceForm({
                 </div>
                 <div className="w-28 shrink-0 text-right">
                   <label className={labelCls}>Total</label>
-                  <p className="truncate py-2.5 text-sm font-semibold text-white/70">
+                  <p className="truncate py-2.5 text-sm font-semibold text-slate-900/70">
                     ₹
                     {calcItemAmount(item.quantity, item.price).toLocaleString(
                       "en-IN",
@@ -267,7 +267,7 @@ export default function InvoiceForm({
         <button
           type="button"
           onClick={addItem}
-          className="mt-4 flex items-center gap-1.5 rounded-xl border border-dashed border-indigo-500/30 bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-400 transition-all duration-200 hover:bg-indigo-500/20 hover:border-indigo-400/50 hover:shadow-[0_0_15px_rgba(99,102,241,0.3)]"
+          className="mt-4 flex items-center gap-1.5 rounded-xl border border-dashed border-slate-300 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition-all duration-200 hover:bg-indigo-500/20 hover:border-indigo-400/50 hover:shadow-[0_0_15px_rgba(99,102,241,0.3)]"
         >
           <Plus size={15} />
           Add Item
@@ -275,7 +275,7 @@ export default function InvoiceForm({
       </fieldset>
 
       {/* ── GST Rate & Notes ──────────────────────────── */}
-      <fieldset className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-2xl transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]">
+      <fieldset className="rounded-2xl border border-slate-200 bg-white shadow-sm backdrop-blur-xl p-6 shadow-2xl transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label className={labelCls}>GST Rate *</label>
@@ -329,7 +329,7 @@ export default function InvoiceForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-indigo-500/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:-translate-y-1 active:translate-y-0 active:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] hover:-translate-y-1 active:translate-y-0 active:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
       >
         {isSubmitting ? (
           <>

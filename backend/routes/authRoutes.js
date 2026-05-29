@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Authentication Routes
+ * Handles user registration, basic login, and OAuth/Firebase social logins.
+ * Employs JWT for session management.
+ * @module routes/authRoutes
+ */
+
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const { getAdmin } = require("../firebaseAdmin");
@@ -5,7 +12,13 @@ const User = require("../models/User");
 
 const router = express.Router();
 
-// Helper — generate JWT with 7-day expiry
+/**
+ * Generates a JSON Web Token (JWT) for user sessions.
+ *
+ * @function generateToken
+ * @param {Object} user - The user document object from MongoDB.
+ * @returns {string} - Signed JWT valid for 7 days.
+ */
 function generateToken(user) {
   return jwt.sign(
     { id: user._id, name: user.name, email: user.email },
@@ -14,7 +27,11 @@ function generateToken(user) {
   );
 }
 
-// ── POST /api/auth/signup ─────────────────────────────────
+/**
+ * @route POST /api/auth/signup
+ * @description Register a new user using email and password.
+ * @access Public
+ */
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -62,7 +79,11 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// ── POST /api/auth/login ──────────────────────────────────
+/**
+ * @route POST /api/auth/login
+ * @description Authenticate user with predefined email and password, return JWT token.
+ * @access Public
+ */
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -112,8 +133,11 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ── POST /api/auth/social ─────────────────────────────────
-// Verify Firebase ID token, find-or-create user, return JWT
+/**
+ * @route POST /api/auth/social
+ * @description Handle Firebase token validation. Supports Google, Apple, Microsoft, and Phone Auth. First time login forces a register, subsequent logins issue a JWT token.
+ * @access Public
+ */
 router.post("/social", async (req, res) => {
   try {
     const { idToken } = req.body;

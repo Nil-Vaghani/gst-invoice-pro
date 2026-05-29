@@ -1,8 +1,19 @@
+/**
+ * @fileoverview Invoice API Routes
+ * Handles CRUD operations for Invoices.
+ * All routes are protected by JWT Middleware.
+ * @module routes/invoiceRoutes
+ */
+
 const express = require("express");
 const router = express.Router();
 const Invoice = require("../models/Invoice");
 
-// POST /api/invoices — Create and save a new invoice
+/**
+ * @route POST /api/invoices
+ * @description Create and save a new GST invoice. Ties the invoice to the authenticated user ID.
+ * @access Private
+ */
 router.post("/", async (req, res) => {
   try {
     const invoice = new Invoice({ ...req.body, user: req.user.id });
@@ -29,7 +40,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-// GET /api/invoices — Fetch all invoices (newest first)
+/**
+ * @route GET /api/invoices
+ * @description Fetch all invoices related to the authenticated user. Newest first.
+ * @access Private
+ */
 router.get("/", async (req, res) => {
   try {
     const invoices = await Invoice.find({ user: req.user.id }).sort({
@@ -49,7 +64,11 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/invoices/:id — Fetch a single invoice by ID
+/**
+ * @route GET /api/invoices/:id
+ * @description Fetch a specific invoice by ID. Ensures user only accesses their own invoice.
+ * @access Private
+ */
 router.get("/:id", async (req, res) => {
   try {
     const invoice = await Invoice.findOne({
@@ -75,7 +94,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// DELETE /api/invoices/:id — Delete a specific invoice
+/**
+ * @route DELETE /api/invoices/:id
+ * @description Delete a specific invoice permanently from MongoDB.
+ * @access Private
+ */
 router.delete("/:id", async (req, res) => {
   try {
     const invoice = await Invoice.findOneAndDelete({
